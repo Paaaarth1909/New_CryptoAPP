@@ -7,7 +7,7 @@ import 'language_screen.dart';
 import '../providers/language_provider.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({super.key});
 
   void _showQuitDialog(BuildContext context) {
     showDialog(
@@ -47,7 +47,10 @@ class SettingsScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 32,
+                          vertical: 12,
+                        ),
                       ),
                       child: const Text(
                         'No',
@@ -69,7 +72,10 @@ class SettingsScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 32,
+                          vertical: 12,
+                        ),
                       ),
                       child: const Text(
                         'Yes',
@@ -133,7 +139,10 @@ class SettingsScreen extends StatelessWidget {
                 child: Consumer<LanguageProvider>(
                   builder: (context, languageProvider, child) {
                     return ListView(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       children: [
                         _buildSettingItem(
                           context: context,
@@ -143,7 +152,8 @@ class SettingsScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const PrivacyPolicyScreen(),
+                                builder: (context) =>
+                                    const PrivacyPolicyScreen(),
                               ),
                             );
                           },
@@ -214,28 +224,18 @@ class SettingsScreen extends StatelessWidget {
             color: const Color(0xFF00BFB3).withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(
-            icon,
-            color: const Color(0xFF00BFB3),
-            size: 20,
-          ),
+          child: Icon(icon, color: const Color(0xFF00BFB3), size: 20),
         ),
         title: Text(
           title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
+          style: const TextStyle(color: Colors.white, fontSize: 16),
         ),
         subtitle: subtitle != null
-          ? Text(
-              subtitle,
-              style: const TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
-              ),
-            )
-          : null,
+            ? Text(
+                subtitle,
+                style: const TextStyle(color: Colors.grey, fontSize: 14),
+              )
+            : null,
         trailing: Container(
           width: 24,
           height: 24,
@@ -243,21 +243,14 @@ class SettingsScreen extends StatelessWidget {
             gradient: const LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: [
-                Color(0xFF00BFB3),
-                Color(0xFF006C84),
-              ],
+              colors: [Color(0xFF00BFB3), Color(0xFF006C84)],
             ),
             borderRadius: BorderRadius.circular(6),
           ),
-          child: const Icon(
-            Icons.chevron_right,
-            color: Colors.white,
-            size: 18,
-          ),
+          child: const Icon(Icons.chevron_right, color: Colors.white, size: 18),
         ),
         onTap: onTap,
       ),
     );
   }
-} 
+}

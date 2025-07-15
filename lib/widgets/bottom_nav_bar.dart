@@ -53,7 +53,7 @@ class CustomBottomNavBar extends StatelessWidget {
               _buildNavItem('assets/images/nav_home.png', 'Home'),
               _buildTrendingNavItem(),
               _buildExploreNavItem(),
-              _buildNavItem('assets/images/nav_wallet.png', 'Wallet'),
+              _buildWalletNavItem(),
               _buildProfileNavItem(),
             ],
           ),
@@ -122,6 +122,29 @@ class CustomBottomNavBar extends StatelessWidget {
         ),
       ),
       label: 'Explore',
+    );
+  }
+
+  BottomNavigationBarItem _buildWalletNavItem() {
+    final isSelected = currentIndex == 3;
+    return BottomNavigationBarItem(
+      icon: Padding(
+        padding: const EdgeInsets.only(bottom: 4),
+        child: Image.asset(
+          isSelected ? 'assets/images/wallet_click.png' : 'assets/images/nav_wallet.png',
+          width: 24,
+          height: 24,
+        ),
+      ),
+      activeIcon: Padding(
+        padding: const EdgeInsets.only(bottom: 4),
+        child: Image.asset(
+          'assets/images/wallet_click.png',
+          width: 24,
+          height: 24,
+        ),
+      ),
+      label: 'Wallet',
     );
   }
 

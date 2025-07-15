@@ -3,6 +3,7 @@ import '../widgets/bottom_nav_bar.dart';
 import 'home_screen.dart';
 import 'news_screen.dart';
 import 'trending_screen.dart';
+import 'portfolio_screen.dart';
 
 class IndexScreen extends StatefulWidget {
   const IndexScreen({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class _IndexScreenState extends State<IndexScreen> {
     const HomeScreen(),
     const TrendingScreen(),
     const NewsScreen(),
-    const Center(child: Text('Wallet', style: TextStyle(color: Colors.white))),
+    const PortfolioScreen(),
     const Center(child: Text('Profile', style: TextStyle(color: Colors.white))),
   ];
 

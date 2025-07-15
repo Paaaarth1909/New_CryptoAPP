@@ -90,6 +90,8 @@ flutter:
     - assets/images/explore_click.png
     - assets/images/trending_click.png
     - assets/images/wallet_click.png
+    - assets/images/empty_portfolio.png
+    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

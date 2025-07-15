@@ -1,20 +1,8 @@
 import 'package:flutter/material.dart';
-
-class ChipItem {
-  final String coinName;
-  final String symbol;
-  final double amount;
-  final double price;
-  final double priceChangePercentage;
-
-  ChipItem({
-    required this.coinName,
-    required this.symbol,
-    required this.amount,
-    required this.price,
-    required this.priceChangePercentage,
-  });
-}
+import '../services/coin_database.dart';
+import '../services/crypto_api_service.dart';
+import 'add_chips_screen.dart';
+import 'remove_chips_screen.dart';
 
 class WalletChipsScreen extends StatefulWidget {
   const WalletChipsScreen({super.key});
@@ -24,36 +12,65 @@ class WalletChipsScreen extends StatefulWidget {
 }
 
 class _WalletChipsScreenState extends State<WalletChipsScreen> {
-  // Temporary list of chips for demonstration
-  final List<ChipItem> _chips = [
-    ChipItem(
-      coinName: 'Bitcoin',
-      symbol: 'BTC',
-      amount: 0.5,
-      price: 853134.900,
-      priceChangePercentage: 10.2,
-    ),
-  ];
+  List<PortfolioCoin> _portfolio = [];
+  bool _isLoading = true;
+  List<CryptoCoin> _allCoins = [];
 
-  void _deleteChip(int index) {
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    setState(() => _isLoading = true);
+    final portfolio = await CoinDatabase.instance.getCoins();
+    final apiCoins = await CryptoApiService().getCryptoList();
     setState(() {
-      _chips.removeAt(index);
+      _portfolio = portfolio;
+      _allCoins = apiCoins;
+      _isLoading = false;
     });
   }
 
+  CryptoCoin? _findApiCoin(String symbol) {
+    try {
+      return _allCoins.firstWhere((c) => c.symbol == symbol);
+    } catch (_) {
+      return null;
+    }
+  }
 
-  Widget _buildChipItem(ChipItem chip, int index) {
+  Widget _buildChipItem(PortfolioCoin coin, int index) {
     return Dismissible(
-      key: Key(chip.symbol + index.toString()),
+      key: Key(coin.symbol + (coin.id?.toString() ?? '')),
       direction: DismissDirection.horizontal,
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.endToStart) {
-          // Delete action
-          _deleteChip(index);
-          return true;
+          // Remove (swipe left)
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RemoveChipsScreen(coin: coin),
+            ),
+          ).then((_) => _fetchData());
+          return false;
         } else if (direction == DismissDirection.startToEnd) {
-          // Add action
-          // TODO: Implement add action
+          // Add (swipe right)
+          final apiCoin = _findApiCoin(coin.symbol);
+          if (apiCoin != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddChipsScreen(
+                  coinName: apiCoin.name,
+                  symbol: apiCoin.symbol,
+                  currentPrice: apiCoin.rate,
+                  priceChangePercentage: apiCoin.changePct,
+                ),
+              ),
+            ).then((_) => _fetchData());
+          }
           return false;
         }
         return false;
@@ -90,32 +107,16 @@ class _WalletChipsScreenState extends State<WalletChipsScreen> {
         ),
         child: ListTile(
           contentPadding: const EdgeInsets.all(12),
-          leading: Container(
-            width: 40,
-            height: 40,
-            decoration: const BoxDecoration(
-              color: Color(0xFFFFB119),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                chip.symbol[0],
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
+          leading: Image.asset(coin.iconPath, width: 40, height: 40),
           title: Text(
-            chip.coinName,
+            coin.name,
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
           ),
           subtitle: Text(
-            chip.symbol,
+            coin.symbol,
             style: const TextStyle(color: Colors.grey),
           ),
           trailing: Column(
@@ -123,7 +124,7 @@ class _WalletChipsScreenState extends State<WalletChipsScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '\$${chip.price.toStringAsFixed(3)}',
+                '\$${coin.value.toStringAsFixed(3)}',
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -132,17 +133,15 @@ class _WalletChipsScreenState extends State<WalletChipsScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: chip.priceChangePercentage >= 0
+                  color: coin.change >= 0
                       ? const Color(0x33008000)
                       : const Color(0x33FF0000),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
-                  '${chip.priceChangePercentage >= 0 ? '+' : ''}${chip.priceChangePercentage}%',
+                  '${coin.change >= 0 ? '+' : ''}${coin.change.toStringAsFixed(2)}%',
                   style: TextStyle(
-                    color: chip.priceChangePercentage >= 0
-                        ? Colors.green
-                        : Colors.red,
+                    color: coin.change >= 0 ? Colors.green : Colors.red,
                     fontSize: 12,
                   ),
                 ),
@@ -184,20 +183,22 @@ class _WalletChipsScreenState extends State<WalletChipsScreen> {
             ],
           ),
         ),
-        child: _chips.isEmpty
-            ? const Center(
-                child: Text(
-                  'No chips added yet',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _portfolio.isEmpty
+                ? const Center(
+                    child: Text(
+                      'No chips added yet',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: _portfolio.length,
+                    itemBuilder: (context, index) => _buildChipItem(_portfolio[index], index),
                   ),
-                ),
-              )
-            : ListView.builder(
-                itemCount: _chips.length,
-                itemBuilder: (context, index) => _buildChipItem(_chips[index], index),
-              ),
       ),
     );
   }

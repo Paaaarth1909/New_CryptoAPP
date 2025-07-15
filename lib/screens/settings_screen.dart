@@ -213,7 +213,7 @@ class SettingsScreen extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.3),
+        color: Colors.black.withAlpha(77),
         borderRadius: BorderRadius.circular(12),
       ),
       child: ListTile(
@@ -221,7 +221,7 @@ class SettingsScreen extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: const Color(0xFF00BFB3).withOpacity(0.1),
+            color: const Color(0xFF00BFB3).withAlpha(25),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon, color: const Color(0xFF00BFB3), size: 20),
@@ -233,7 +233,7 @@ class SettingsScreen extends StatelessWidget {
         subtitle: subtitle != null
             ? Text(
                 subtitle,
-                style: const TextStyle(color: Colors.grey, fontSize: 14),
+                style: const TextStyle(color: Colors.grey.withAlpha(51), fontSize: 14),
               )
             : null,
         trailing: Container(

@@ -170,7 +170,7 @@ class NewsDetailScreen extends StatelessWidget {
                 color: Colors.grey[900],
                 border: Border(
                   top: BorderSide(
-                    color: Colors.grey.withOpacity(0.2),
+                    color: Colors.grey.withAlpha(51),
                     width: 0.5,
                   ),
                 ),

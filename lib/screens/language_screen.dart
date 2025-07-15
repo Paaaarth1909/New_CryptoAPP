@@ -67,7 +67,7 @@ class LanguageScreen extends StatelessWidget {
                               border: index < Language.languages.length - 1
                                 ? Border(
                                     bottom: BorderSide(
-                                      color: Colors.grey.withOpacity(0.2),
+                                      color: Colors.grey.withAlpha(51),
                                       width: 0.5,
                                     ),
                                   )

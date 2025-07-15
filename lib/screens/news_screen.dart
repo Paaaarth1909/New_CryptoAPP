@@ -440,7 +440,7 @@ class _NewsCardState extends State<NewsCard> {
           color: Colors.black,
           border: Border(
             bottom: BorderSide(
-              color: Colors.grey.withOpacity(0.2),
+              color: Colors.grey.withAlpha(51),
               width: 0.5,
             ),
           ),

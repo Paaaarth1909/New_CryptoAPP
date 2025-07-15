@@ -233,7 +233,7 @@ class SettingsScreen extends StatelessWidget {
         subtitle: subtitle != null
             ? Text(
                 subtitle,
-                style: const TextStyle(color: Colors.grey.withAlpha(51), fontSize: 14),
+                style: TextStyle(color: Colors.grey.withAlpha(51), fontSize: 14),
               )
             : null,
         trailing: Container(

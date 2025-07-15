@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class CustomBottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
+  final VoidCallback? onRemoveChips;
 
   const CustomBottomNavBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
+    this.onRemoveChips,
   });
 
   @override
@@ -54,6 +56,7 @@ class CustomBottomNavBar extends StatelessWidget {
               _buildTrendingNavItem(),
               _buildExploreNavItem(),
               _buildWalletNavItem(),
+              _buildRemoveChipsNavItem(),
               _buildProfileNavItem(),
             ],
           ),
@@ -145,6 +148,23 @@ class CustomBottomNavBar extends StatelessWidget {
         ),
       ),
       label: 'Wallet',
+    );
+  }
+
+  BottomNavigationBarItem _buildRemoveChipsNavItem() {
+    return BottomNavigationBarItem(
+      icon: GestureDetector(
+        onTap: onRemoveChips,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: Image.asset(
+            'assets/images/remove_button.png',
+            width: 24,
+            height: 24,
+          ),
+        ),
+      ),
+      label: '',
     );
   }
 

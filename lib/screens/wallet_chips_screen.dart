@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/coin_database.dart';
 import '../services/crypto_api_service.dart';
+import '../models/crypto_coin.dart';
 import 'add_chips_screen.dart';
 import 'remove_chips_screen.dart';
 
@@ -47,7 +48,6 @@ class _WalletChipsScreenState extends State<WalletChipsScreen> {
       direction: DismissDirection.horizontal,
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.endToStart) {
-          // Remove (swipe left)
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -56,7 +56,6 @@ class _WalletChipsScreenState extends State<WalletChipsScreen> {
           ).then((_) => _fetchData());
           return false;
         } else if (direction == DismissDirection.startToEnd) {
-          // Add (swipe right)
           final apiCoin = _findApiCoin(coin.symbol);
           if (apiCoin != null) {
             Navigator.push(

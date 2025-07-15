@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../services/coin_database.dart';
 import 'wallet_chips_screen.dart';
+import '../services/crypto_api_service.dart';
+import '../models/crypto_coin.dart';
 
 class PortfolioScreen extends StatefulWidget {
   const PortfolioScreen({Key? key}) : super(key: key);
@@ -12,22 +14,47 @@ class PortfolioScreen extends StatefulWidget {
 class _PortfolioScreenState extends State<PortfolioScreen> {
   List<PortfolioCoin> _coins = [];
   bool _isLoading = true;
+  double _totalUsdValue = 0;
 
   @override
   void initState() {
     super.initState();
-    _fetchCoins();
+    _fetchCoinsAndPrices();
   }
 
-  Future<void> _fetchCoins() async {
+  Future<void> _fetchCoinsAndPrices() async {
+    setState(() {
+      _isLoading = true;
+    });
     final coins = await CoinDatabase.instance.getCoins();
+    final apiCoins = await CryptoApiService().getCryptoList();
+    double total = 0;
+    for (final portfolioCoin in coins) {
+      final apiCoin = apiCoins.firstWhere(
+        (c) => c.symbol == portfolioCoin.symbol,
+        orElse: () => CryptoCoin(
+          symbol: portfolioCoin.symbol,
+          name: portfolioCoin.name,
+          fullName: portfolioCoin.name,
+          icon: '',
+          rate: 0,
+          changePct: 0,
+          change: 0,
+          volume: 0,
+          high: 0,
+          low: 0,
+          cap: 0,
+        ),
+      );
+      // Assume portfolioCoin.value is the amount of coins held
+      total += portfolioCoin.value * apiCoin.rate;
+    }
     setState(() {
       _coins = coins;
+      _totalUsdValue = total;
       _isLoading = false;
     });
   }
-
-  double get _totalValue => _coins.fold(0, (sum, c) => sum + c.value);
 
   Widget _buildPortfolioValueCard() {
     return Container(
@@ -53,7 +80,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           ),
           const SizedBox(height: 10),
           Text(
-            "\$ ${_totalValue.toStringAsFixed(3)}",
+            "\$ ${_totalUsdValue.toStringAsFixed(3)}",
             style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
           ),
         ],

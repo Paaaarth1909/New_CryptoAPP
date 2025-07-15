@@ -46,3 +46,6 @@ app.*.map.json
 
 # Hide real API config
 lib/config/api_config.dart
+
+# Hide crypto news API service
+lib/services/crypto_news_api_service.dart

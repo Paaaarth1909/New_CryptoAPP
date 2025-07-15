@@ -3,9 +3,39 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'news_detail_screen.dart';
+import '../services/crypto_news_api_service.dart';
 
-class NewsScreen extends StatelessWidget {
+class NewsScreen extends StatefulWidget {
   const NewsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<NewsScreen> createState() => _NewsScreenState();
+}
+
+class _NewsScreenState extends State<NewsScreen> {
+  List<CryptoNewsItem> _news = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchNews();
+  }
+
+  Future<void> _fetchNews() async {
+    setState(() => _isLoading = true);
+    try {
+      final news = await CryptoNewsApiService().fetchNews();
+      setState(() {
+        _news = news;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +61,15 @@ class NewsScreen extends StatelessWidget {
         children: [
           const NewsSearchBar(),
           Expanded(
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: 10, // Will be replaced with actual news data length
-              itemBuilder: (context, index) {
-                return const NewsCard();
-              },
-            ),
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: _news.length,
+                    itemBuilder: (context, index) {
+                      return NewsCard(news: _news[index]);
+                    },
+                  ),
           ),
         ],
       ),
@@ -171,7 +203,8 @@ class _NewsSearchBarState extends State<NewsSearchBar> {
 }
 
 class NewsCard extends StatefulWidget {
-  const NewsCard({Key? key}) : super(key: key);
+  final CryptoNewsItem news;
+  const NewsCard({Key? key, required this.news}) : super(key: key);
 
   @override
   State<NewsCard> createState() => _NewsCardState();
@@ -219,7 +252,7 @@ class _NewsCardState extends State<NewsCard> {
               ),
               _buildOptionItem(
                 icon: Icons.person_remove_outlined,
-                label: 'Unfollow Binance',
+                label: 'Unfollow',
                 onTap: () {
                   Navigator.pop(context);
                   isOptionsSheetOpen = false;
@@ -251,7 +284,6 @@ class _NewsCardState extends State<NewsCard> {
           ),
         ),
       ).then((_) {
-        // This callback is called when the bottom sheet is dismissed
         isOptionsSheetOpen = false;
       });
     }
@@ -287,8 +319,8 @@ class _NewsCardState extends State<NewsCard> {
   void _shareNews() async {
     try {
       await Share.share(
-        'Check out this news from Binance Marketplace!\nhttps://binance.com/marketplace',
-        subject: 'Binance Marketplace News',
+        widget.news.title + '\n' + widget.news.content,
+        subject: widget.news.title,
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -298,7 +330,6 @@ class _NewsCardState extends State<NewsCard> {
   }
 
   void _saveNews() {
-    // Implement save functionality
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('News saved successfully'),
@@ -308,7 +339,7 @@ class _NewsCardState extends State<NewsCard> {
   }
 
   void _openInBrowser() async {
-    final Uri url = Uri.parse('https://binance.com/marketplace');
+    final Uri url = Uri.parse(widget.news.newsImage);
     try {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } catch (e) {
@@ -393,24 +424,7 @@ class _NewsCardState extends State<NewsCard> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const NewsDetailScreen(
-          title: 'Binance Marketplace, The Super App for Crypto!',
-          content: '''Access your favorite businesses right at your fingertips via the Binance app. Binance Marketplace is a platform that makes spending crypto easy and rewarding.
-
-Featuring over 16 merchants and mini apps, Binance Marketplace is a one-stop shop for all your crypto payment needs and more.
-
-Discover exclusive offers when you pay for hotel stays, rideshare services, shopping, dining, and more with Binance Pay via Binance Marketplace.
-
-What Can You Do on Marketplace?
-
-On Binance Marketplace, you can make purchases, book hotel stays and experiences with crypto, participate in Binance Launchpad, and even earn rewards with Liquid Swap. You can also access the Binance DeFi Wallet, NFT Marketplace, and Binance Live via the Binance Marketplace.
-
-There are also mini games within the app that you can play with friends and that offer you a chance to win prizes. Need to top up your phone credit? Do it from anywhere you please with the [Mobile Top-Up] feature on Binance Marketplace and earn cashback while you're at it.''',
-          authorName: 'Binance',
-          timeAgo: '6m ago',
-          authorImage: 'assets/images/logo.png',
-          newsImage: 'assets/images/logo.png',
-        ),
+        builder: (context) => NewsDetailScreen(news: widget.news),
       ),
     );
   }
@@ -436,25 +450,25 @@ There are also mini games within the app that you can play with friends and that
           children: [
             Row(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 20,
-                  backgroundImage: AssetImage('assets/images/logo.png'),
+                  backgroundImage: NetworkImage(widget.news.authorImage),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Binance',
-                        style: TextStyle(
+                      Text(
+                        widget.news.authorName,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        'Satellites',
+                        widget.news.timeAgo,
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 14,
@@ -489,9 +503,9 @@ There are also mini games within the app that you can play with friends and that
               ],
             ),
             const SizedBox(height: 12),
-            const Text(
-              'Binance Expands Account Statement Function. With our VIP and institutional clients in mind, we\'ve upgraded the account statement function...',
-              style: TextStyle(
+            Text(
+              widget.news.title,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,
               ),
@@ -502,8 +516,8 @@ There are also mini games within the app that you can play with friends and that
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.grey[900],
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/logo.png'),
+                image: DecorationImage(
+                  image: NetworkImage(widget.news.newsImage),
                   fit: BoxFit.cover,
                 ),
               ),

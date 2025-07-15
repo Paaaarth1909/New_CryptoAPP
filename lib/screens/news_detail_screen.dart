@@ -1,22 +1,9 @@
 import 'package:flutter/material.dart';
+import '../services/crypto_news_api_service.dart';
 
 class NewsDetailScreen extends StatelessWidget {
-  final String title;
-  final String content;
-  final String authorName;
-  final String timeAgo;
-  final String authorImage;
-  final String newsImage;
-
-  const NewsDetailScreen({
-    Key? key,
-    required this.title,
-    required this.content,
-    required this.authorName,
-    required this.timeAgo,
-    required this.authorImage,
-    required this.newsImage,
-  }) : super(key: key);
+  final CryptoNewsItem news;
+  const NewsDetailScreen({Key? key, required this.news}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +39,7 @@ class NewsDetailScreen extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 20,
-                            backgroundImage: AssetImage(authorImage),
+                            backgroundImage: NetworkImage(news.authorImage),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
@@ -60,7 +47,7 @@ class NewsDetailScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  authorName,
+                                  news.authorName,
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -68,7 +55,7 @@ class NewsDetailScreen extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  timeAgo,
+                                  news.timeAgo,
                                   style: TextStyle(
                                     color: Colors.grey[600],
                                     fontSize: 14,
@@ -103,7 +90,7 @@ class NewsDetailScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       // News content
                       Text(
-                        title,
+                        news.title,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -113,15 +100,15 @@ class NewsDetailScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Image.asset(
-                          newsImage,
+                        child: Image.network(
+                          news.newsImage,
                           width: double.infinity,
                           fit: BoxFit.cover,
                         ),
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        content,
+                        news.content,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -196,9 +183,9 @@ class NewsDetailScreen extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 18,
-                    backgroundImage: AssetImage('assets/images/logo.png'),
+                    backgroundImage: NetworkImage(news.authorImage),
                   ),
                   const SizedBox(width: 12),
                   Expanded(

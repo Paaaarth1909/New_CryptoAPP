@@ -25,10 +25,10 @@ class OnboardingScreen2 extends StatelessWidget {
       body: GestureDetector(
         onHorizontalDragEnd: (details) {
           if (details.primaryVelocity != null && details.primaryVelocity! < 0) {
-            // Swipe left
+            // Swipe left: go to next
             _goToNext(context);
           } else if (details.primaryVelocity != null && details.primaryVelocity! > 0) {
-            // Swipe right
+            // Swipe right: go to previous
             _goToPrev(context);
           }
         },

@@ -110,37 +110,11 @@ class OnboardingScreen1 extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
                   child: GestureDetector(
                     onTap: () => _goToNext(context),
-                    child: Container(
+                    child: Image.asset(
+                      'assets/images/get_started_button.png',
                       width: double.infinity,
                       height: 56,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [
-                            Color(0xFF00BFB3),
-                            Color(0xFF006C84),
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(28),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF00BFB3).withAlpha(60),
-                            blurRadius: 16,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Get Started',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),

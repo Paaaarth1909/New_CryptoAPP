@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'onboarding_flow.dart';
+import 'onboarding_screen1.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const OnboardingFlow()),
+          MaterialPageRoute(builder: (context) => const OnboardingScreen1()),
         );
       }
     });
@@ -47,28 +47,25 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Center(
-        child: FadeTransition(
-          opacity: _fadeAnimation,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                width: 120,
-                height: 120,
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                'CryptoX',
-                style: TextStyle(
-                  color: Color(0xFF00BFB3),
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFBDBDBD), // light grey
+              Color(0xFF757575), // dark grey
             ],
+          ),
+        ),
+        child: Center(
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: Image.asset(
+              'assets/images/logo.png',
+              width: 180,
+              height: 180,
+            ),
           ),
         ),
       ),

@@ -3,6 +3,8 @@ import '../services/coin_database.dart';
 import 'wallet_chips_screen.dart';
 import '../services/crypto_api_service.dart';
 import '../models/crypto_coin.dart';
+import 'add_chips_screen.dart';
+import 'remove_chips_screen.dart';
 
 class PortfolioScreen extends StatefulWidget {
   const PortfolioScreen({Key? key}) : super(key: key);
@@ -104,23 +106,74 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
       itemCount: _coins.length,
       itemBuilder: (context, index) {
         final coin = _coins[index];
-        return ListTile(
-          leading: Image.asset(coin.iconPath, width: 40),
-          title: Text(coin.name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          subtitle: Text(coin.symbol, style: const TextStyle(color: Colors.white70)),
-          trailing: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '\$ ${coin.value.toStringAsFixed(3)}',
-                style: const TextStyle(color: Colors.white),
-              ),
-              Text(
-                '▲ ${coin.change.toStringAsFixed(2)}%',
-                style: const TextStyle(color: Color(0xFF1DE9B6), fontWeight: FontWeight.bold),
-              ),
-            ],
+        return Dismissible(
+          key: Key(coin.symbol + (coin.id?.toString() ?? '')),
+          direction: DismissDirection.horizontal,
+          confirmDismiss: (direction) async {
+            if (direction == DismissDirection.endToStart) {
+              // Swipe left: Add chips
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddChipsScreen(
+                    coinName: coin.name,
+                    symbol: coin.symbol,
+                    currentPrice: 0, // You can fetch the latest price if needed
+                    priceChangePercentage: 0, // You can fetch the latest change if needed
+                  ),
+                ),
+              ).then((_) => _fetchCoinsAndPrices());
+              return false;
+            } else if (direction == DismissDirection.startToEnd) {
+              // Swipe right: Remove chips
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RemoveChipsScreen(coin: coin),
+                ),
+              ).then((_) => _fetchCoinsAndPrices());
+              return false;
+            }
+            return false;
+          },
+          background: Container(
+            color: const Color(0xFF4CAF50),
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.only(left: 20),
+            child: Image.asset(
+              'assets/images/add_redbutton.png',
+              width: 40,
+              height: 40,
+            ),
+          ),
+          secondaryBackground: Container(
+            color: Colors.red,
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.only(right: 20),
+            child: Image.asset(
+              'assets/images/delete_button.png',
+              width: 40,
+              height: 40,
+            ),
+          ),
+          child: ListTile(
+            leading: Image.asset(coin.iconPath, width: 40),
+            title: Text(coin.name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            subtitle: Text(coin.symbol, style: const TextStyle(color: Colors.white70)),
+            trailing: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '\$ ${coin.value.toStringAsFixed(3)}',
+                  style: const TextStyle(color: Colors.white),
+                ),
+                Text(
+                  '▲ ${coin.change.toStringAsFixed(2)}%',
+                  style: const TextStyle(color: Color(0xFF1DE9B6), fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -148,15 +201,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text("Added chips", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const WalletChipsScreen()),
-                        );
-                      },
-                      child: const Text("See All Coin →", style: TextStyle(color: Color(0xFF1DE9B6))),
-                    ),
+                    // Remove the TextButton for "See All Coin"
                   ],
                 ),
               ),

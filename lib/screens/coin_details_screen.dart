@@ -178,26 +178,15 @@ class _CoinDetailsScreenState extends State<CoinDetailsScreen> {
                           )
                         : Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: LineChart(
-                              LineChartData(
-                                gridData: const FlGridData(show: false),
-                                titlesData: const FlTitlesData(show: false),
-                                borderData: FlBorderData(show: false),
-                                lineBarsData: [
-                                  LineChartBarData(
-                                    spots: _getSpots(),
-                                    isCurved: true,
-                                    color: const Color(0xFF00BFB3),
-                                    barWidth: 2,
-                                    isStrokeCapRound: true,
-                                    dotData: const FlDotData(show: false),
-                                    belowBarData: BarAreaData(
-                                      show: true,
-                                      color: const Color(0xFF00BFB3).withAlpha(25),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                            child: Candlesticks(
+                              candles: _graphData!.candles.map((c) => Candle(
+                                date: c.date,
+                                open: c.open,
+                                high: c.high,
+                                low: c.low,
+                                close: c.close,
+                                volume: c.volume,
+                              )).toList(),
                             ),
                           ),
               ),
@@ -317,24 +306,25 @@ class _CoinDetailsScreenState extends State<CoinDetailsScreen> {
               // Add Chips Button
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // TODO: Implement add chips functionality
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddChipsScreen(
+                          coinName: widget.coin.name,
+                          symbol: widget.coin.symbol,
+                          currentPrice: widget.coin.rate,
+                          priceChangePercentage: widget.coin.changePct,
+                        ),
+                      ),
+                    );
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00BFB3),
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text(
-                    'Add chips',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Image.asset(
+                    'assets/images/add_chips_button.png',
+                    width: double.infinity,
+                    height: 56,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/crypto_api_service.dart';
 import '../models/crypto_coin.dart';
+import 'coin_details_screen.dart';
 
 class TrendingScreen extends StatefulWidget {
   const TrendingScreen({Key? key}) : super(key: key);
@@ -129,33 +130,63 @@ class _TrendingScreenState extends State<TrendingScreen> {
     final priceChangeColor =
         coin.changePct >= 0 ? const Color(0xFF00FFA3) : Colors.red;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        children: [
-          Image.network(
-            coin.icon,
-            width: 40,
-            height: 40,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                width: 40,
-                height: 40,
-                decoration: const BoxDecoration(
-                  color: Color(0xFF1E1E1E),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.currency_bitcoin, color: Colors.white),
-              );
-            },
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CoinDetailsScreen(coin: coin),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        child: Row(
+          children: [
+            Image.network(
+              coin.icon,
+              width: 40,
+              height: 40,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  width: 40,
+                  height: 40,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF1E1E1E),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.currency_bitcoin, color: Colors.white),
+                );
+              },
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    coin.name,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    coin.symbol.toUpperCase(),
+                    style: TextStyle(
+                      color: Colors.grey[400],
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  coin.name,
+                  '\$${coin.rate.toStringAsFixed(3)}',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -163,37 +194,17 @@ class _TrendingScreenState extends State<TrendingScreen> {
                   ),
                 ),
                 Text(
-                  coin.symbol.toUpperCase(),
+                  '${coin.changePct >= 0 ? "+" : ""}${coin.changePct.toStringAsFixed(2)}%',
                   style: TextStyle(
-                    color: Colors.grey[400],
+                    color: priceChangeColor,
                     fontSize: 12,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '\$${coin.rate.toStringAsFixed(3)}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                '${coin.changePct >= 0 ? "+" : ""}${coin.changePct.toStringAsFixed(2)}%',
-                style: TextStyle(
-                  color: priceChangeColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

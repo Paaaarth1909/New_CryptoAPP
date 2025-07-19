@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/coin_database.dart';
 import 'wallet_chips_screen.dart';
+import 'portfolio_screen.dart';
 
 class RemoveChipsScreen extends StatefulWidget {
   final PortfolioCoin coin;
@@ -49,13 +50,28 @@ class _RemoveChipsScreenState extends State<RemoveChipsScreen> {
 
   Future<void> _removeChips() async {
     setState(() => _isRemoving = true);
-    // For demo: remove the coin entirely if any amount is entered
-    await CoinDatabase.instance.removeCoin(widget.coin.id!);
+    final double amt = double.tryParse(amount) ?? 0;
+    if (amt >= widget.coin.value) {
+      // Remove the coin entirely
+      await CoinDatabase.instance.removeCoin(widget.coin.id!);
+    } else if (amt > 0) {
+      // Subtract the amount and update
+      final updatedCoin = PortfolioCoin(
+        id: widget.coin.id,
+        name: widget.coin.name,
+        symbol: widget.coin.symbol,
+        value: widget.coin.value - amt,
+        change: widget.coin.change,
+        iconPath: widget.coin.iconPath,
+      );
+      final db = await CoinDatabase.instance.database;
+      await db.update('coins', updatedCoin.toMap(), where: 'id = ?', whereArgs: [widget.coin.id]);
+    }
     setState(() => _isRemoving = false);
     if (mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const WalletChipsScreen()),
+        MaterialPageRoute(builder: (context) => const PortfolioScreen()),
       );
     }
   }

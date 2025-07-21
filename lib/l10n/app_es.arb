@@ -1,3 +1,7 @@
 {
-    "hello": "Hola"
-} 
+  "@@locale": "es",
+  "hello": "Hola",
+  "@hello": {
+    "description": "Greeting message"
+  }
+}

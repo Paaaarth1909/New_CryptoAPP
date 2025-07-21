@@ -6,7 +6,7 @@ import 'add_chips_screen.dart';
 import 'remove_chips_screen.dart';
 
 class PortfolioScreen extends StatefulWidget {
-  const PortfolioScreen({Key? key}) : super(key: key);
+  const PortfolioScreen({super.key});
 
   @override
   State<PortfolioScreen> createState() => _PortfolioScreenState();
@@ -47,7 +47,6 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           cap: 0,
         ),
       );
-      // Assume portfolioCoin.value is the amount of coins held
       total += portfolioCoin.value * apiCoin.rate;
     }
     setState(() {
@@ -55,6 +54,10 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
       _totalUsdValue = total;
       _isLoading = false;
     });
+  }
+
+  void _onRemoveChips() {
+    // Implement the logic for removing chips, e.g., show a dialog or navigate
   }
 
   Widget _buildPortfolioValueCard() {
@@ -72,24 +75,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
-              const Text(
-                "Total Portfolio Value",
-                style: TextStyle(color: Colors.white, fontSize: 14),
-              ),
-              const SizedBox(width: 8),
-              const Icon(Icons.remove_red_eye, color: Colors.white, size: 18),
+              Text("Total Portfolio Value", style: TextStyle(color: Colors.white, fontSize: 14)),
+              SizedBox(width: 8),
+              Icon(Icons.remove_red_eye, color: Colors.white, size: 18),
             ],
           ),
           const SizedBox(height: 10),
           Text(
             "\$ ${_totalUsdValue.toStringAsFixed(3)}",
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -117,22 +113,19 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           direction: DismissDirection.horizontal,
           confirmDismiss: (direction) async {
             if (direction == DismissDirection.endToStart) {
-              // Swipe left: Add chips
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => AddChipsScreen(
                     coinName: coin.name,
                     symbol: coin.symbol,
-                    currentPrice: 0, // You can fetch the latest price if needed
-                    priceChangePercentage:
-                        0, // You can fetch the latest change if needed
+                    currentPrice: 0,
+                    priceChangePercentage: 0,
                   ),
                 ),
               ).then((_) => _fetchCoinsAndPrices());
               return false;
             } else if (direction == DismissDirection.startToEnd) {
-              // Swipe right: Remove chips
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -165,17 +158,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           ),
           child: ListTile(
             leading: Image.asset(coin.iconPath, width: 40),
-            title: Text(
-              coin.name,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            subtitle: Text(
-              coin.symbol,
-              style: const TextStyle(color: Colors.white70),
-            ),
+            title: Text(coin.name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            subtitle: Text(coin.symbol, style: const TextStyle(color: Colors.white70)),
             trailing: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -186,10 +170,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                 ),
                 Text(
                   '▲ ${coin.change.toStringAsFixed(2)}%',
-                  style: const TextStyle(
-                    color: Color(0xFF1DE9B6),
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: const TextStyle(color: Color(0xFF1DE9B6), fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -211,41 +192,31 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
               const SizedBox(height: 16),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  "My Portfolio",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                child: Text("My Portfolio", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
               ),
               _buildPortfolioValueCard(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      "Added chips",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    // Remove the TextButton for "See All Coin"
+                    Text("Added chips", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
               _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : _coins.isEmpty
-                  ? _buildEmptyPortfolio()
-                  : _buildCoinList(),
+                      ? _buildEmptyPortfolio()
+                      : _buildCoinList(),
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _onRemoveChips,
+        backgroundColor: const Color(0xFF00BFB3),
+        child: Image.asset('assets/images/remove_button.png', width: 24, height: 24),
       ),
     );
   }

@@ -1,54 +1,43 @@
 import 'package:flutter/material.dart';
+import '../widgets/bottom_nav_bar.dart';
+import 'home_screen.dart';
+import 'news_screen.dart';
+import 'trending_screen.dart';
+import 'portfolio_screen.dart';
+import 'settings_screen.dart';
 
-class IndexScreen extends StatelessWidget {
-  const IndexScreen({Key? key}) : super(key: key);
+class IndexScreen extends StatefulWidget {
+  const IndexScreen({super.key});
+
+  @override
+  State<IndexScreen> createState() => _IndexScreenState();
+}
+
+class _IndexScreenState extends State<IndexScreen> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const TrendingScreen(),
+    const NewsScreen(),
+    const PortfolioScreen(),
+    const SettingsScreen(),
+  ];
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Placeholder: No history data
-    final bool hasHistory = false;
     return Scaffold(
-      backgroundColor: const Color(0xFF232323),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.arrow_back, color: Colors.white),
-                  ),
-                  const SizedBox(width: 16),
-                  const Text(
-                    'Portfolio History',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Center(
-                child: hasHistory
-                    // ignore: dead_code
-                    ? const Text(
-                        'History data goes here',
-                        style: TextStyle(color: Colors.white),
-                      )
-                    : Image.asset(
-                        'assets/images/no_data_image.png',
-                        width: 260,
-                      ),
-              ),
-            ),
-          ],
-        ),
+      backgroundColor: Colors.black,
+      body: _screens[_currentIndex],
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: _currentIndex,
+        onTap: _onTabTapped,
       ),
     );
   }

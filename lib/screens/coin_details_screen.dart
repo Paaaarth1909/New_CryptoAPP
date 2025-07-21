@@ -64,16 +64,6 @@ class _CoinDetailsScreenState extends State<CoinDetailsScreen> {
     }
   }
 
-  List<FlSpot> _getSpots() {
-    if (_graphData == null) return [];
-    return _graphData!.candles.asMap().entries.map((entry) {
-      return FlSpot(
-        entry.key.toDouble(),
-        entry.value.close,
-      );
-    }).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     final isPositiveChange = widget.coin.changePct >= 0;
@@ -84,10 +74,7 @@ class _CoinDetailsScreenState extends State<CoinDetailsScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF1C1C1E),
-              Color(0xFF2C2C2E),
-            ],
+            colors: [Color(0xFF1C1C1E), Color(0xFF2C2C2E)],
           ),
         ),
         child: SafeArea(
@@ -103,11 +90,7 @@ class _CoinDetailsScreenState extends State<CoinDetailsScreen> {
                       child: const Icon(Icons.arrow_back, color: Colors.white),
                     ),
                     const SizedBox(width: 16),
-                    Image.network(
-                      widget.coin.icon,
-                      width: 24,
-                      height: 24,
-                    ),
+                    Image.network(widget.coin.icon, width: 24, height: 24),
                     const SizedBox(width: 8),
                     Text(
                       '${widget.coin.name} ${widget.coin.symbol}',
@@ -135,10 +118,7 @@ class _CoinDetailsScreenState extends State<CoinDetailsScreen> {
                   children: [
                     const Text(
                       'Price Per Unit',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      ),
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
                     ),
                     const SizedBox(height: 4),
                     Row(
@@ -155,7 +135,9 @@ class _CoinDetailsScreenState extends State<CoinDetailsScreen> {
                         Text(
                           '${isPositiveChange ? '+' : ''}${widget.coin.changePct.toStringAsFixed(1)}%',
                           style: TextStyle(
-                            color: isPositiveChange ? const Color(0xFF00BFB3) : Colors.red,
+                            color: isPositiveChange
+                                ? const Color(0xFF00BFB3)
+                                : Colors.red,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
@@ -170,39 +152,38 @@ class _CoinDetailsScreenState extends State<CoinDetailsScreen> {
                 child: _isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : _graphData == null
-                        ? const Center(
-                            child: Text(
-                              'Failed to load graph data',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Candlesticks(
-                              candles: _graphData!.candles.map((c) => Candle(
-                                date: c.date,
-                                open: c.open,
-                                high: c.high,
-                                low: c.low,
-                                close: c.close,
-                                volume: c.volume,
-                              )).toList(),
-                            ),
-                          ),
+                    ? const Center(
+                        child: Text(
+                          'Failed to load graph data',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Candlesticks(
+                          candles: _graphData!.candles
+                              .map(
+                                (c) => Candle(
+                                  date: c.date,
+                                  open: c.open,
+                                  high: c.high,
+                                  low: c.low,
+                                  close: c.close,
+                                  volume: c.volume,
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
               ),
               // Timeframe Buttons
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    '24h',
-                    '7d',
-                    '30d',
-                    '90d',
-                    '1y',
-                    'All',
-                  ].map((timeframe) {
+                  children: ['24h', '7d', '30d', '90d', '1y', 'All'].map((
+                    timeframe,
+                  ) {
                     final isSelected = timeframe == _selectedTimeframe;
                     return GestureDetector(
                       onTap: () {
@@ -224,8 +205,9 @@ class _CoinDetailsScreenState extends State<CoinDetailsScreen> {
                           timeframe,
                           style: TextStyle(
                             color: isSelected ? Colors.white : Colors.grey,
-                            fontWeight:
-                                isSelected ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                         ),
                       ),
@@ -339,13 +321,7 @@ class _CoinDetailsScreenState extends State<CoinDetailsScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.grey,
-            fontSize: 14,
-          ),
-        ),
+        Text(label, style: const TextStyle(color: Colors.grey, fontSize: 14)),
         const SizedBox(height: 4),
         Text(
           value,
@@ -358,4 +334,4 @@ class _CoinDetailsScreenState extends State<CoinDetailsScreen> {
       ],
     );
   }
-} 
+}

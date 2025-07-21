@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../services/coin_database.dart';
-import 'wallet_chips_screen.dart';
 import 'portfolio_screen.dart';
 
 class RemoveChipsScreen extends StatefulWidget {
@@ -65,7 +64,12 @@ class _RemoveChipsScreenState extends State<RemoveChipsScreen> {
         iconPath: widget.coin.iconPath,
       );
       final db = await CoinDatabase.instance.database;
-      await db.update('coins', updatedCoin.toMap(), where: 'id = ?', whereArgs: [widget.coin.id]);
+      await db.update(
+        'coins',
+        updatedCoin.toMap(),
+        where: 'id = ?',
+        whereArgs: [widget.coin.id],
+      );
     }
     setState(() => _isRemoving = false);
     if (mounted) {
@@ -268,4 +272,4 @@ class _RemoveChipsScreenState extends State<RemoveChipsScreen> {
       ),
     );
   }
-} 
+}

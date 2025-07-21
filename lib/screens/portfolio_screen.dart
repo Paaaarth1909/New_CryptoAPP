@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../services/coin_database.dart';
-import 'wallet_chips_screen.dart';
 import '../services/crypto_api_service.dart';
 import '../models/crypto_coin.dart';
 import 'add_chips_screen.dart';
@@ -75,7 +74,10 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
         children: [
           Row(
             children: [
-              const Text("Total Portfolio Value", style: TextStyle(color: Colors.white, fontSize: 14)),
+              const Text(
+                "Total Portfolio Value",
+                style: TextStyle(color: Colors.white, fontSize: 14),
+              ),
               const SizedBox(width: 8),
               const Icon(Icons.remove_red_eye, color: Colors.white, size: 18),
             ],
@@ -83,7 +85,11 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           const SizedBox(height: 10),
           Text(
             "\$ ${_totalUsdValue.toStringAsFixed(3)}",
-            style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
@@ -119,7 +125,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                     coinName: coin.name,
                     symbol: coin.symbol,
                     currentPrice: 0, // You can fetch the latest price if needed
-                    priceChangePercentage: 0, // You can fetch the latest change if needed
+                    priceChangePercentage:
+                        0, // You can fetch the latest change if needed
                   ),
                 ),
               ).then((_) => _fetchCoinsAndPrices());
@@ -158,8 +165,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           ),
           child: ListTile(
             leading: Image.asset(coin.iconPath, width: 40),
-            title: Text(coin.name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-            subtitle: Text(coin.symbol, style: const TextStyle(color: Colors.white70)),
+            title: Text(
+              coin.name,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            subtitle: Text(
+              coin.symbol,
+              style: const TextStyle(color: Colors.white70),
+            ),
             trailing: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -170,7 +186,10 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                 ),
                 Text(
                   '▲ ${coin.change.toStringAsFixed(2)}%',
-                  style: const TextStyle(color: Color(0xFF1DE9B6), fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    color: Color(0xFF1DE9B6),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -192,7 +211,14 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
               const SizedBox(height: 16),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text("My Portfolio", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+                child: Text(
+                  "My Portfolio",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
               _buildPortfolioValueCard(),
               Padding(
@@ -200,7 +226,14 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Added chips", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                    const Text(
+                      "Added chips",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     // Remove the TextButton for "See All Coin"
                   ],
                 ),
@@ -208,12 +241,12 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
               _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : _coins.isEmpty
-                      ? _buildEmptyPortfolio()
-                      : _buildCoinList(),
+                  ? _buildEmptyPortfolio()
+                  : _buildCoinList(),
             ],
           ),
         ),
       ),
     );
   }
-} 
+}

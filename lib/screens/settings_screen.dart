@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'privacy_policy_screen.dart';
-import 'index_screen.dart';
+import 'portfolio_history_screen.dart';
 import 'language_screen.dart';
 import '../providers/language_provider.dart';
 
@@ -161,12 +161,12 @@ class SettingsScreen extends StatelessWidget {
                         _buildSettingItem(
                           context: context,
                           icon: Icons.star_outline,
-                          title: 'Index',
+                          title: 'Portfolio History',
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const IndexScreen(),
+                                builder: (context) => const PortfolioHistoryScreen(),
                               ),
                             );
                           },

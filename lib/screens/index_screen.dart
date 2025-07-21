@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import '../widgets/bottom_nav_bar.dart';
-import 'home_screen.dart';
-import 'news_screen.dart';
-import 'trending_screen.dart';
-import 'portfolio_screen.dart';
-import 'settings_screen.dart';
+import 'package:crypto_app/screens/home_screen.dart';
+import 'package:crypto_app/screens/trending_screen.dart';
+import 'package:crypto_app/screens/news_screen.dart';
+import 'package:crypto_app/screens/portfolio_screen.dart';
+import 'package:crypto_app/screens/settings_screen.dart';
+import 'package:crypto_app/widgets/bottom_nav_bar.dart';
 
 class IndexScreen extends StatefulWidget {
   const IndexScreen({super.key});
 
   @override
-  State<IndexScreen> createState() => _IndexScreenState();
+  _IndexScreenState createState() => _IndexScreenState();
 }
 
 class _IndexScreenState extends State<IndexScreen> {
@@ -33,7 +33,6 @@ class _IndexScreenState extends State<IndexScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       body: _screens[_currentIndex],
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _currentIndex,

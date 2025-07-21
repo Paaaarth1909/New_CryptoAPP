@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.8.1
+  sdk: '>=3.0.0 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,11 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sqflite: ^2.3.0
-  path: ^1.8.3
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  # ... other dependencies
   cupertino_icons: ^1.0.8
   candlesticks: ^2.1.0
   fl_chart: ^1.0.0
@@ -42,9 +41,9 @@ dependencies:
   share_plus: ^11.0.0
   http: ^1.4.0
   provider: ^6.1.5
-  flutter_localizations:
-    sdk: flutter
   shared_preferences: ^2.5.3
+  sqflite: ^2.3.0
+  path: ^1.8.3
 
 dev_dependencies:
   flutter_test:
@@ -70,31 +69,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/bg_dot1.png
-    - assets/images/bg_dot2.png
-    - assets/images/bg_dot3.png
-    - assets/images/get_started_button.png
-    - assets/images/logo.png
-    - assets/images/nav_explore.png
-    - assets/images/nav_home.png
-    - assets/images/nav_profile.png
-    - assets/images/nav_trending.png
-    - assets/images/nav_wallet.png
-    - assets/images/onboarding_candles.png
-    - assets/images/onboarding_rocket.png
-    - assets/images/shield_logo.png
-    - assets/images/add_chips_button.png
-    - assets/images/add_button.png
-    - assets/images/delete_button.png
-    - assets/images/add_redbutton.png
-    - assets/images/profile_click.png
-    - assets/images/no_data_image.png
-    - assets/images/explore_click.png
-    - assets/images/trending_click.png
-    - assets/images/wallet_click.png
-    - assets/images/empty_portfolio.png
-    - assets/images/remove_button.png
-    
+    - assets/images/
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

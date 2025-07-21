@@ -1,9 +1,10 @@
-import 'package:crypto_app/models/language.dart';
-import 'package:crypto_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'providers/language_provider.dart';
+import 'screens/splash_screen.dart';
+import 'models/language.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,14 +23,8 @@ class MyApp extends StatelessWidget {
             title: 'Crypto Onboarding',
             debugShowCheckedModeBanner: false,
             locale: languageProvider.currentLocale,
-            supportedLocales: Language.languages.map(
-              (language) => Locale(language.languageCode, language.countryCode),
-            ),
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             theme: ThemeData(
               scaffoldBackgroundColor: Colors.black,
               appBarTheme: const AppBarTheme(

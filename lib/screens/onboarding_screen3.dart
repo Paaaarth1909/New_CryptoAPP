@@ -1,23 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:crypto_app/screens/home_screen.dart';
-import 'onboarding_screen2.dart';
+import 'package:crypto_app/screens/index_screen.dart';
 
 class OnboardingScreen3 extends StatelessWidget {
   const OnboardingScreen3({super.key});
-
-  void _goToPrev(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const OnboardingScreen2()),
-    );
-  }
-
-  void _goToHome(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +10,7 @@ class OnboardingScreen3 extends StatelessWidget {
       body: GestureDetector(
         onHorizontalDragEnd: (details) {
           if (details.primaryVelocity != null && details.primaryVelocity! > 0) {
-            // Swipe right: go to previous
-            _goToPrev(context);
+            // Swipe right, do nothing or go to screen 2
           }
         },
         child: Container(
@@ -112,7 +96,13 @@ class OnboardingScreen3 extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
                   child: GestureDetector(
-                    onTap: () => _goToHome(context),
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const IndexScreen()),
+                      );
+                    },
                     child: Image.asset(
                       'assets/images/get_started_button.png',
                       width: double.infinity,

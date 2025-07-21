@@ -36,8 +36,15 @@ class IndexScreen extends StatelessWidget {
             Expanded(
               child: Center(
                 child: hasHistory
-                    ? const Text('History data goes here', style: TextStyle(color: Colors.white))
-                    : Image.asset('assets/images/no_data_image.png', width: 260),
+                    // ignore: dead_code
+                    ? const Text(
+                        'History data goes here',
+                        style: TextStyle(color: Colors.white),
+                      )
+                    : Image.asset(
+                        'assets/images/no_data_image.png',
+                        width: 260,
+                      ),
               ),
             ),
           ],
@@ -45,4 +52,4 @@ class IndexScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}
